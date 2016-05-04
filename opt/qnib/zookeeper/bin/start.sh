@@ -1,12 +1,6 @@
-#!/bin/sh
+#!/usr/local/bin/dumb-init /bin/sh
 
-
-function stop_zk {
-     zk_pid=$(ps -ef|grep -v grep |grep "java -Dzookeeper.log.dir"|awk '{print $2}')
-     if [ "X${zk_pid}" != "X" ];then
-         kill -9 ${zk_pid}
-     fi
-}
+consul-template -consul localhost:8500 -once -template "/etc/consul-templates/zoo.cfg.ctmpl:/opt/zookeeper/conf/zoo.cfg"
 
 ## inherited from
 # https://raw.githubusercontent.com/mesoscloud/zookeeper/master/3.4.6/centos/7/entrypoint.sh
@@ -16,11 +10,11 @@ function stop_zk {
 
 if [ "X${START_ZOOKEEPER}" == "Xfalse" ];then
     echo "Skip starting zookeeper since START_ZOOKEEPER==false"
+    rm -f /etc/consul.d/zookeeper.json
+    consul reload
     sleep 5
     exit 0
 fi
-
-trap "echo stopping zookeeper;stop_zk; exit" HUP INT TERM EXIT
 
 echo ${MYID:-1} > /tmp/zookeeper/myid
 if [ "${MYID-0}" -gt 0 ];then
