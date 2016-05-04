@@ -16,3 +16,5 @@ ADD etc/consul-templates/zoo.cfg.ctmpl \
 ENV PATH=/opt/zookeeper/bin:${PATH}
 RUN echo "tail -f /var/log/supervisor/zookeeper.log" >> /root/.bash_history && \
     echo "cat /opt/zookeeper/conf/zoo.cfg" >> /root/.bash_history
+ADD opt/zookeeper/conf/zoo.cfg /opt/zookeeper/conf/
+VOLUME ["/data/zookeeper"]
