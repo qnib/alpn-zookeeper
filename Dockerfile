@@ -5,7 +5,7 @@ ENV ZK_VER=3.4.8
 RUN apk add --update curl \
  && curl -fsL http://apache.mirror.digitalpacific.com.au/zookeeper/zookeeper-${ZK_VER}/zookeeper-${ZK_VER}.tar.gz | tar xzf - -C /opt && mv /opt/zookeeper-${ZK_VER} /opt/zookeeper \
  && rm -rf /tmp/* /var/cache/apk/*
-ADD etc/supervisord.d/zookeeper.ini
+ADD etc/supervisord.d/zookeeper.ini \
     etc/supervisord.d/zookeeper_update.ini \
     /etc/supervisord.d/
 ADD opt/qnib/zookeeper/bin/*.sh /opt/qnib/zookeeper/bin/
