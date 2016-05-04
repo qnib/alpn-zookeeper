@@ -1,6 +1,5 @@
 #!/usr/local/bin/dumb-init /bin/sh
 
-consul-template -consul localhost:8500 -once -template "/etc/consul-templates/zoo.cfg.ctmpl:/opt/zookeeper/conf/zoo.cfg"
 
 ## inherited from
 # https://raw.githubusercontent.com/mesoscloud/zookeeper/master/3.4.6/centos/7/entrypoint.sh
@@ -21,5 +20,7 @@ if [ "${MYID-0}" -gt 0 ];then
    echo "Sleep according to MYID $(echo "${MYID}*2"|bc)"
    sleep $(echo "${MYID}*2"|bc)
 fi
+sleep 2
+consul-template -consul localhost:8500 -once -template "/etc/consul-templates/zoo.cfg.ctmpl:/opt/zookeeper/conf/zoo.cfg"
 
 /opt/zookeeper/bin/zkServer.sh start-foreground
