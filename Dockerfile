@@ -1,9 +1,13 @@
 ###### grafana images
 FROM qnib/alpn-jre8
 
-ENV ZK_VER=3.4.8
+VOLUME ["/data/zookeeper"]
+ARG ZK_VER=3.4.8
+ENV PATH=/opt/zookeeper/bin:${PATH}
+
 RUN apk add --update curl \
- && curl -fsL http://apache.mirror.digitalpacific.com.au/zookeeper/zookeeper-${ZK_VER}/zookeeper-${ZK_VER}.tar.gz | tar xzf - -C /opt && mv /opt/zookeeper-${ZK_VER} /opt/zookeeper \
+ && curl -fsL http://apache.mirror.digitalpacific.com.au/zookeeper/zookeeper-${ZK_VER}/zookeeper-${ZK_VER}.tar.gz | tar xzf - -C /opt \
+ && mv /opt/zookeeper-${ZK_VER} /opt/zookeeper \
  && rm -rf /tmp/* /var/cache/apk/*
 ADD etc/supervisord.d/zookeeper.ini \
     etc/supervisord.d/zookeeper_update.ini \
@@ -17,4 +21,3 @@ ENV PATH=/opt/zookeeper/bin:${PATH}
 RUN echo "tail -f /var/log/supervisor/zookeeper.log" >> /root/.bash_history && \
     echo "cat /opt/zookeeper/conf/zoo.cfg" >> /root/.bash_history
 ADD opt/zookeeper/conf/zoo.cfg /opt/zookeeper/conf/
-VOLUME ["/data/zookeeper"]
