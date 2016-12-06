@@ -48,7 +48,7 @@ else
 fi
 consul-cli kv write ${SRV_STRING}/${HOSTNAME} ${MY_ID}
 consul-cli kv write ${SRV_STRING}/$(cat /etc/hostname) ${MY_ID}
-if [ "X${USE_GETHOSTNAME}" == "Xtrue" ];then
+if [ "X${CONSUL_GETHOSTNAME}" == "Xtrue" ];then
    consul-cli kv write ${SRV_STRING}/$(go-getmyname) ${MY_ID}
 fi
 consul-cli kv unlock ${SRV_STRING}/lock --session ${SESSION_ID}
